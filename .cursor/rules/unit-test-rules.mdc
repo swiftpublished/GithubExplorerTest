@@ -1,0 +1,165 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# ✅ Cursor Rules for iOS Testing (With DSL, Suites, Async Handling)
+
+This guide defines standardized rules and best practices for writing Swift tests using modern async features, DSL syntax, and test organization.
+
+---
+
+## 📚 Table of Contents
+
+1. Overview  
+2. Testing Frameworks  
+3. Naming Conventions  
+4. Test Structure & Suite Organization  
+5. Unit Testing Guidelines  
+6. Parameterized Testing  
+7. Async/Await + Continuation Handling  
+8. Performance Testing  
+9. UI Testing (UIKit & SwiftUI)  
+10. Best Practices  
+
+---
+
+## 🧾 Overview
+
+All iOS tests should be:
+- **Isolated** (no inter-test dependencies)
+- **Readable** (via naming and structure)
+- **Grouped** using `@Suite`
+- Written using **Given-When-Then** principles or DSL annotations like `@Test`, `#expect`, `#require`
+
+---
+
+## 🧪 Testing Frameworks
+
+- **XCTest** – Core testing.
+- **XCUITest** – UI automation.
+- **Swift DSL Extensions** – (e.g., `@Test`, `@Suite`, `#expect`) to improve expressiveness.
+
+---
+
+## 🏷 Naming Conventions
+
+### Test Class  
+`<ModuleOrFeature>Tests`  
+Example: `CallServiceTests`
+
+### Test Method  
+`test<Feature>_Should<Outcome>_When<Condition>`  
+Example: `testGetToken_ShouldReturnToken_WhenCallIDIsValid`
+
+---
+
+## 🧱 Test Structure & Suite Organization
+
+Use nested `@Suite` structs to logically group test cases.
+
+```swift
+struct CallServiceTests {
+    @Suite("Token")
+    struct TokenTests {
+        @Test("get call token success")
+        func getCallToken_success() { ... }
+    }
+}
+```
+
+---
+
+## ✅ Unit Testing Guidelines
+
+Basic example:
+```swift
+@Test("search user by name success")
+func searchUsersByUserName_success() {
+    let service = makeAPIServiceMock(users: .success(users))
+    sut = UserListViewModel(input: .init(service))
+    sut.searchUsers("user A")
+    #expect(sut.getUserCount() == 1)
+}
+```
+
+---
+
+## 🔁 Parameterized Testing
+
+```swift
+@Test("search ➡️ success", arguments: ["user A", 1])
+func searchUsers_Success(keyword: String, userCount: Int) {
+    let service = makeAPIServiceMock(users: .success(users))
+    sut = UserListViewModel(input: .init(service))
+    sut.searchUsers(keyword)
+    #expect(sut.getUserCount() == userCount)
+}
+```
+
+---
+
+## ⏳ Async/Await + Continuation Handling
+
+Use `withCheckedThrowingContinuation` for bridging async APIs and add error capture with `Issue.record`.
+
+```swift
+@Test("get call token success")
+func getCallToken_success() {
+    let callID = "CallID"
+    let expectedCall = makeCallModel(id: callID)
+    let callREST = CallsRESTMock(.failure(error))
+
+    do {
+        let result = try await withCheckedThrowingContinuation { continuation in
+            callREST.getCallToken(with: callID) { result in
+                switch result {
+                case .success(let token):
+                    continuation.resume(returning: token)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+        #expect(result == expectedCall.token)
+    } catch {
+        Issue.record("Expected to succeed, but failed due to error: \(error.asResponseDecoderError)")
+    }
+}
+```
+
+---
+
+## 📈 Performance Testing
+
+```swift
+func testPerformance_Parsing() {
+    measure {
+        _ = JSONDecoder().decode(LargeModel.self, from: mockData)
+    }
+}
+```
+
+---
+
+## 🎨 UI Testing Guidelines
+
+- Always use `.accessibilityIdentifier(...)`
+- Prefer `XCTAssertTrue(element.exists)` for visibility checks
+- Use `.isHittable`, `.label`, `.value` assertions
+
+---
+
+## 🔐 Best Practices
+
+✅ Use `sut` for the system under test  
+✅ Share fixtures like `users` within `@Suite`  
+✅ Group similar tests together  
+✅ Use Swift's async features and continuation bridging only when necessary  
+✅ Avoid force unwrapping in tests – prefer `#require`  
