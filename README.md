@@ -14,6 +14,13 @@ A modern iOS application that allows users to browse and search GitHub repositor
 - **Detailed Views**: Explore repository and owner details with a clean, intuitive interface
 - **Modern UI**: Built with SwiftUI featuring smooth animations and loading states
 
+# 📱 App Demo
+
+Here's a quick look at the app in action:
+
+<p align="center">
+  <img src="./assets/Githubexplorertestflow.gif" width="300">
+</p>
 
 ## Requirements
 
