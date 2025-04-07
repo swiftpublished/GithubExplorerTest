@@ -22,6 +22,21 @@ Here's a quick look at the app in action:
   <img src="./assets/Githubexplorertestflow.gif" width="300">
 </p>
 
+
+
+## 🖼️ Screenshots
+
+<p align="center">
+  <img src="./assets/screen1.png" width="200"/>
+  <img src="./assets/screen2.png" width="200"/>
+  <img src="./assets/screen3.png" width="200"/>
+  <img src="./assets/screen4.png" width="200"/>
+  <img src="./assets/screen5.png" width="200"/>
+  <img src="./assets/screen6.png" width="200"/>
+  <img src="./assets/screen7.png" width="200"/>
+
+</p>
+
 ## Requirements
 
 - iOS 16.0+
