@@ -37,6 +37,16 @@ Here's a quick look at the app in action:
 
 </p>
 
+## 📖 Read the Article
+
+Curious about the latest in Swift Testing? Dive deep into modern testing strategies with Xcode 16.
+
+> 🧪 **Swift Testing — A Modern Testing Framework in Xcode 16**
+
+[👉 Read the full article here](https://swiftpublished.com/article/swift-testing)
+
+> ✍️ *Explore Swift Testing, new features, best practices, and how to integrate it into your iOS projects effectively.*
+
 ## Requirements
 
 - iOS 16.0+
